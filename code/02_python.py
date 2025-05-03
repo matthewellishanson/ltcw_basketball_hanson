@@ -259,7 +259,7 @@ roster_list
 pts(8, 4, 5)
 pts(8, 5, 4)  # order matters!
 
-pts?
+# pts?
 
 pts(fg3=4, fg2=8, ft=5)  # keyword arguments
 pts(8, 4, ft=5)
