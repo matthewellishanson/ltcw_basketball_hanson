@@ -6,7 +6,7 @@ import seaborn as sns
 from os import path
 
 pd.options.mode.chained_assignment = None
-%matplotlib qt
+# %matplotlib qt
 
 # directories
 DATA_DIR = './data'
@@ -20,9 +20,10 @@ dft = pd.read_csv(path.join(DATA_DIR, 'teams.csv'))
 cats2 = ['layup', 'pullup', 'float', 'dunk', 'hook', 'fadeaway', 'step']
 dfs['jump'] = dfs[cats2].sum(axis=1) == 0
 
-dfs['shot_type'] = np.nan
+dfs['shot_type'] = pd.Series([np.nan] * len(dfs), dtype='object')
 for shot in cats2 + ['jump']:
     dfs.loc[dfs[shot], 'shot_type'] = shot
+
 
 #############
 # shot charts
@@ -80,7 +81,7 @@ g = shot_chart(dfs, hue='made', style='made', s=15)
 g = shot_chart(dfs, hue='made', col='team', col_wrap=6, aspect=1.2, height=2)
 
 # do it for some single game
-g = shot_chart(dfs.query("game_id == 21900002"), hue='made', style='made',
+singlegame = shot_chart(dfs.query("game_id == 21900002"), hue='made', style='made',
         col='name', col_wrap=5, aspect=1.2, height=2)
 
 ### Contour Plots
@@ -91,3 +92,9 @@ g.set(yticks=[], xticks=[], xlabel=None, ylabel=None)
 g.despine(left=True, bottom=True)
 for ax in g.figure.axes:
     ax.imshow(map_img, zorder=0, extent=[-250, 250, -30, 400])
+
+
+# save the figure
+g.savefig(path.join(DATA_DIR, 'shot_chart.png'), dpi=300)
+singlegame.savefig(path.join(DATA_DIR, 'shot_chart2.png'), dpi=300)
+
